@@ -21,9 +21,16 @@ const FileUploader = () => {
   const fileQueue = useRef([]);
 
   const uploadFile = async (file) => {
-    try {
-      const apiUrl = process.env.REACT_APP_API_URL;
+    const apiUrl = process.env.REACT_APP_API_URL;
 
+    if (!apiUrl) {
+      console.error(
+        "REACT_APP_API_URL is not defined. Check your Vercel env vars."
+      );
+      return;
+    }
+
+    try {
       const { data } = await axios.post(`${apiUrl}/api/get-presigned-url`, {
         filename: file.name,
         type: file.type,
@@ -41,7 +48,7 @@ const FileUploader = () => {
         },
       });
     } catch (err) {
-      console.error(`Failed to upload ${file.name}`, err);
+      console.error(`❌ Failed to upload ${file.name}`, err.response || err);
     }
   };
 
@@ -106,7 +113,7 @@ const FileUploader = () => {
                       : 0
                   }
                   size="small"
-                />{" "}
+                />
               </BlockStack>
             </InlineStack>
           ))}
