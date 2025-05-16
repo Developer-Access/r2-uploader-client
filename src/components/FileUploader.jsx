@@ -22,13 +22,12 @@ const FileUploader = () => {
 
   const uploadFile = async (file) => {
     try {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/get-presigned-url`,
-        {
-          filename: file.name,
-          type: file.type,
-        }
-      );
+      const apiUrl = process.env.REACT_APP_API_URL;
+
+      const { data } = await axios.post(`${apiUrl}/api/get-presigned-url`, {
+        filename: file.name,
+        type: file.type,
+      });
 
       await axios.put(data.url, file, {
         headers: {
